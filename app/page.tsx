@@ -82,7 +82,7 @@ export default function Home() {
           <p>I connect product thinking, operations and hands-on delivery — from an ambiguous problem to a working local-first tool.</p>
           <div className="hero-actions">
             <a className="button button-primary" href="#work">Explore selected work</a>
-            <a className="button button-ghost" href="#contact">Start a conversation</a>
+            <a className="button button-ghost" href="#approach">See how I work</a>
           </div>
         </div>
         <div className="proof-strip" aria-label="Core strengths">
@@ -173,8 +173,7 @@ export default function Home() {
         <h2>Hiring for AI product, product operations or a hands-on PM?</h2>
         <p>I can show the private products in a guided interview demo and go deeper on the decisions, trade-offs and verification behind them.</p>
         <div className="contact-actions">
-          <a className="button button-primary" href="#contact">Email me</a>
-          <a className="button button-ghost" href="https://www.linkedin.com/in/zuzanna-sobecka-69275117b" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a className="button button-primary" href="https://www.linkedin.com/in/zuzanna-sobecka-69275117b" target="_blank" rel="noreferrer">Contact me on LinkedIn ↗</a>
           <a className="text-link" href="https://github.com/zrsobecka" target="_blank" rel="noreferrer">GitHub ↗</a>
         </div>
       </section>
