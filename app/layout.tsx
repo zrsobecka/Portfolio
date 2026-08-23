@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Zuzanna Sobecka — AI Product Builder',
-  description: 'AI product builder connecting product thinking, operations and hands-on delivery.',
+  title: 'Zuzanna Sobecka — AI Product Manager & Builder',
+  description: 'AI Product Manager connecting user problems, product decisions, operations and hands-on delivery.',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

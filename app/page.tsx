@@ -11,6 +11,13 @@ type Project = {
   role: string;
   decision: string;
   evidence: string;
+  audience: string;
+  discovery: string;
+  tradeoff: string;
+  learning: string;
+  nextProof: string;
+  metrics?: { value: string; label: string }[];
+  workflow?: string[];
   stack: string;
   link?: string;
 };
@@ -24,8 +31,19 @@ const featuredProjects: Project[] = [
     lede: 'A desktop studio where multiple AI characters share a persistent world while keeping memory, perspective and story truth distinct.',
     problem: 'Long-running AI stories lose continuity and flatten distinct characters into one generic voice.',
     role: 'Product direction, system design, implementation, evaluation and release preparation.',
-    decision: 'Separate world truth from each character’s private beliefs, access and emotional state — then update derived continuity without blocking play.',
-    evidence: 'Packaged desktop build, regression suites, benchmark tooling, recovery workflows and a draft cross-platform alpha pipeline.',
+    audience: 'Writers and role-players who want persistent multi-character stories while keeping their content and model traffic local.',
+    discovery: 'Mapped continuity failures, profiled the production turn pipeline with content-free receipts and reviewed repeated fixed-fixture model runs manually.',
+    decision: 'Keep Character and Story State outside the response critical path. For public-context turns, remove the slow universal repair loop; retain the hard gate only where private Director context can affect the answer.',
+    tradeoff: 'The faster path makes remaining model limitations visible. One grounding fixture still invented technical evidence in 2/3 runs, so I kept that risk explicit instead of hiding it behind a slow fallback.',
+    evidence: 'Across the same nine-fixture production benchmark, median latency fell from 24.1 s to 8.7 s; repairs fell from 7/9 to 0/9; safe fallbacks from 3/9 to 0/9; semantic acceptance improved from 5/9 to 6/9.',
+    learning: 'The bottleneck was local-model inference, not interface or prompt assembly: measured non-native overhead before first text was only 0.13–0.24 s. Rebuilding the coordinator would have added risk without improving the experience.',
+    nextProof: 'Run a small external alpha on a clean machine and test continuity while derived state is deliberately delayed.',
+    metrics: [
+      { value: '24.1 → 8.7 s', label: 'median response latency' },
+      { value: '7/9 → 0/9', label: 'repair requests' },
+      { value: '5/9 → 6/9', label: 'semantic acceptance' },
+    ],
+    workflow: ['Participant beat', 'Visible response', 'Durable save', 'State in background'],
     stack: 'Tauri · Rust · React · TypeScript · SQLite · LM Studio',
   },
   {
@@ -34,8 +52,19 @@ const featuredProjects: Project[] = [
     lede: 'A local-first workspace that connects founder discovery, lead review, relationship context and follow-ups without automating human judgment.',
     problem: 'Founder research and outreach context were fragmented across searches, notes, spreadsheets and conversations.',
     role: 'Workflow discovery, product architecture, desktop and extension integration, implementation and migration planning.',
+    audience: 'A sales operator who needs to turn founder signals into useful conversations without volume pressure, blank-page writing or CRM administration.',
+    discovery: 'Mapped the daily workflow from signal to outcome and separated commercial stage, relationship state, next action and evidence instead of compressing them into one generic status.',
     decision: 'Make SQLite the local source of truth and keep outreach user-controlled. The companion extension only processes information already visible to the user.',
-    evidence: 'Packaged desktop app, structured pipeline, local knowledge integration and a Chrome companion with explicit review and save boundaries.',
+    tradeoff: 'Rejected both a generic CRM and an automatic sender. Vile prepares up to three high-value actions, preserves the full queue and treats defer or reject as valid operator decisions.',
+    evidence: 'The current private workflow holds 30 relationship records, 36 lifecycle events and 9 approved knowledge sources in one local system. The packaged app and Chrome companion preserve explicit review before every save or send-adjacent action.',
+    learning: 'Lead volume and generated drafts are diagnostic signals, not product value. The meaningful measure is whether qualified opportunities move through useful conversations to a recorded commercial outcome.',
+    nextProof: 'Measure signal-to-approved-action time and commercial outcomes in the next complete sales cycle; validate configuration with a second workspace before claiming repeatability.',
+    metrics: [
+      { value: '30', label: 'relationship records' },
+      { value: '36', label: 'lifecycle events' },
+      { value: '9', label: 'approved knowledge sources' },
+    ],
+    workflow: ['Signal', 'Qualify', 'Opportunity', 'Conversation', 'Outcome'],
     stack: 'Tauri · React · TypeScript · Rust · SQLite · Local AI',
   },
   {
@@ -44,8 +73,13 @@ const featuredProjects: Project[] = [
     lede: 'A desktop workspace that turns local Git evidence, product intent and feature health into a clear next action.',
     problem: 'Resuming a complex software project means reconstructing context from repositories, notes, chats and memory.',
     role: 'Product framing, information architecture, implementation and packaging workflow.',
+    audience: 'Hands-on builders who return to several local software projects and need to recover the next useful action quickly.',
+    discovery: 'Separated observable Git facts from editable product context and designed the interface around the resume-work loop.',
     decision: 'Keep Git facts read-only, store product context locally and optimize the interface around the resume-work loop rather than generic project management.',
+    tradeoff: 'Kept the first version intentionally local and read-only around Git rather than adding collaboration, cloud sync or repository writes before the core loop was proven.',
     evidence: 'Working Windows MVP with repository registration, branch and change scanning, project goals, feature horizons and local SQLite persistence.',
+    learning: 'Project dashboards only help when they reduce re-orientation time. More status fields would add maintenance unless each one changes the next decision.',
+    nextProof: 'Measure time-to-resume across repeated real project returns and test the workflow with another builder.',
     stack: 'Tauri · Rust · React · TypeScript · SQLite · Git',
     link: 'https://github.com/zrsobecka/Orion',
   },
@@ -76,17 +110,17 @@ export default function Home() {
       </nav>
 
       <section className="hero section-shell" id="top">
-        <div className="eyebrow"><span>AI product builder</span><span>Warsaw, PL</span></div>
-        <h1>I turn messy workflows into AI products people can actually use.</h1>
+        <div className="eyebrow"><span>AI Product Manager · hands-on builder</span><span>Warsaw, PL</span></div>
+        <h1>AI Product Manager who turns messy workflows into working products.</h1>
         <div className="hero-bottom">
-          <p>I connect product thinking, operations and hands-on delivery — from an ambiguous problem to a working local-first tool.</p>
+          <p>I connect user problems, product decisions and hands-on delivery — then use benchmarks, tests and real workflow evidence to decide what changes next.</p>
           <div className="hero-actions">
             <a className="button button-primary" href="#work">Explore selected work</a>
             <a className="button button-ghost" href="#approach">See how I work</a>
           </div>
         </div>
         <div className="proof-strip" aria-label="Core strengths">
-          <span>Product discovery → working software</span><span>AI workflows + local-first systems</span><span>Founder research + business operations</span>
+          <span>Product discovery → measurable decision</span><span>AI workflows + local-first systems</span><span>Operations experience → realistic constraints</span>
         </div>
       </section>
 
@@ -109,18 +143,29 @@ export default function Home() {
                 <span>Case // 0{index + 1}</span><h3>{project.name}</h3><p>{project.descriptor}</p>
               </header>
               <div className="case-card">
-                <div className={`case-visual visual-${project.id}`} aria-hidden="true">
+                <div className={`case-visual visual-${project.id}`}>
                   <div className="case-orbit orbit-one" /><div className="case-orbit orbit-two" />
-                  <Image src={project.icon} alt="" width={148} height={148} /><span>{project.status}</span>
+                  <Image src={project.icon} alt={`${project.name} product icon`} width={112} height={112} />
+                  {project.metrics ? <div className="evidence-panel" aria-label={`${project.name} verified evidence`}>
+                    <p>Verified product evidence</p>
+                    <div className="metric-grid">{project.metrics.map((metric) => <div key={metric.label}><b>{metric.value}</b><span>{metric.label}</span></div>)}</div>
+                    <ol className="workflow-strip">{project.workflow?.map((step) => <li key={step}>{step}</li>)}</ol>
+                  </div> : null}
+                  <span>{project.status}</span>
                 </div>
                 <div className="case-copy">
                   <p className="case-lede">{project.lede}</p>
                   <dl className="decision-grid">
+                    <div><dt>For whom</dt><dd>{project.audience}</dd></div>
                     <div><dt>Problem</dt><dd>{project.problem}</dd></div>
+                    <div><dt>Discovery</dt><dd>{project.discovery}</dd></div>
                     <div><dt>My role</dt><dd>{project.role}</dd></div>
                     <div><dt>Key decision</dt><dd>{project.decision}</dd></div>
+                    <div><dt>Trade-off / rejected path</dt><dd>{project.tradeoff}</dd></div>
                     <div><dt>Evidence</dt><dd>{project.evidence}</dd></div>
+                    <div><dt>What I learned and changed</dt><dd>{project.learning}</dd></div>
                   </dl>
+                  <p className="case-next"><b>Next evidence-producing step</b>{project.nextProof}</p>
                   <div className="case-meta"><span>{project.stack}</span>{project.link ? <a href={project.link} target="_blank" rel="noreferrer">View public repository ↗</a> : <span>Private demo during interview</span>}</div>
                 </div>
               </div>
@@ -169,13 +214,24 @@ export default function Home() {
       </section>
 
       <section className="contact section-shell" id="contact">
-        <p className="eyebrow-label">Open to the right problem</p>
-        <h2>Hiring for AI product, product operations or a hands-on PM?</h2>
-        <p>I can show the private products in a guided interview demo and go deeper on the decisions, trade-offs and verification behind them.</p>
-        <div className="contact-actions">
-          <a className="button button-primary" href="https://www.linkedin.com/in/zuzanna-sobecka-69275117b" target="_blank" rel="noreferrer">Contact me on LinkedIn ↗</a>
-          <a className="text-link" href="https://github.com/zrsobecka" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <div className="contact-copy">
+          <p className="eyebrow-label">Warsaw · open to the right problem</p>
+          <h2>AI Product Manager, AI Product Specialist or Product Operations.</h2>
+          <p>I can show the private products in a guided interview demo and go deeper on the decisions, trade-offs and verification behind them. My full CV is shared directly with job applications.</p>
+          <div className="contact-actions">
+            <a className="button button-primary" href="https://www.linkedin.com/in/zuzanna-sobecka-69275117b" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+            <a className="text-link" href="https://github.com/zrsobecka" target="_blank" rel="noreferrer">GitHub ↗</a>
+          </div>
         </div>
+        <form className="contact-form" name="portfolio-contact" method="POST" action="/thanks" data-netlify="true" data-netlify-honeypot="company-website">
+          <input type="hidden" name="form-name" value="portfolio-contact" />
+          <p className="form-honeypot"><label>Do not fill this out: <input name="company-website" /></label></p>
+          <label>Your name<input name="name" type="text" autoComplete="name" required /></label>
+          <label>Work email<input name="email" type="email" autoComplete="email" required /></label>
+          <label>Role or message<textarea name="message" rows={5} required /></label>
+          <button className="button button-primary" type="submit">Send a message</button>
+          <p className="form-note">Handled by Netlify so my private email stays off the public page. Please do not include sensitive information.</p>
+        </form>
       </section>
 
       <footer className="section-shell"><p>© 2026 Zuzanna Sobecka</p><p>Designed for clarity. Built with evidence.</p></footer>
