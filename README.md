@@ -2,6 +2,8 @@
 
 Personal portfolio presenting selected AI products through product decisions, trade-offs and verified evidence rather than screenshots alone.
 
+Its audience is hiring teams, collaborators and clients who want a concise, evidence-based view of the work. It is a presentation site, not a production interface for the featured products.
+
 ## Featured work
 
 - **Menma** — a local AI storytelling system for persistent multi-character worlds.
@@ -40,4 +42,18 @@ The production URL is intentionally not hard-coded. Netlify provides it through 
 
 ## Privacy
 
-The public site does not expose a private email address. Do not commit environment files, credentials, lead exports or private product data; relevant paths and file types are excluded in `.gitignore`.
+The site displays only portfolio copy, project artwork and intentionally public GitHub and LinkedIn links. It does not expose a private email address, use analytics or place application cookies. A submitted contact message is handled by Netlify Forms under the deployment owner's Netlify account.
+
+Do not commit environment files, credentials, lead exports or private product data; relevant paths and file types are excluded in `.gitignore`. Run `npm audit` and `npm run check` before a public release.
+
+## Scope and limitations
+
+- Project descriptions summarize selected work; they are not source releases of the featured private products.
+- Contact-form delivery depends on Netlify Forms being enabled for the deployed site.
+- The repository contains no backend, user accounts, database or secret runtime configuration.
+
+See [CODEBASE.md](CODEBASE.md) for the structure, [WORKFLOW-DIAGRAM.md](WORKFLOW-DIAGRAM.md) for the release flow and [AGENTS.md](AGENTS.md) for contribution safeguards.
+
+## Licence
+
+Released under the [MIT Licence](LICENCE.md).
