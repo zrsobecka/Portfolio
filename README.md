@@ -32,11 +32,11 @@ Open `http://localhost:3000`.
 npm run check
 ```
 
-This runs the strict ESLint check followed by the production build and TypeScript validation.
+This runs the strict ESLint check followed by the production build and TypeScript validation. GitHub Actions runs `npm audit` and the same code check for every pull request and push to `main`.
 
 ## Deployment
 
-Netlify builds the site with `npm run build` and publishes the generated `out` directory. The contact form uses Netlify Forms and redirects successful submissions to `/thanks`.
+Pushes to `main` trigger GitHub CI and an automatic Netlify build. Netlify publishes the generated `out` directory only after `npm audit` and the full code check pass. The contact form uses Netlify Forms and redirects successful submissions to `/thanks`.
 
 The production URL is intentionally not hard-coded. Netlify provides it through the `URL` build variable, which is also used to generate absolute social-preview metadata.
 

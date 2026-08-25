@@ -22,7 +22,7 @@ type Project = {
   link?: string;
 };
 
-const products = ['Vile', 'Vile for LinkedIn', 'Raptor', 'Akasha', 'Orion', 'Menma'];
+const products = ['Menma', 'Vile', 'Orion', 'Vile for LinkedIn', 'Raptor', 'Akasha'];
 
 const featuredProjects: Project[] = [
   {

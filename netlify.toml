@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm audit && npm run check"
   publish = "out"
 
 [build.environment]

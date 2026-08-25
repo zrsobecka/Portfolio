@@ -16,4 +16,4 @@ Next.js renders the site to static files in `out/`. The browser receives no appl
 
 ## Quality gates
 
-`npm run check` runs strict ESLint validation and a production build, which also validates TypeScript. `npm audit` checks installed dependency versions against npm's vulnerability database.
+`npm run check` runs strict ESLint validation and a production build, which also validates TypeScript. `npm audit` checks installed dependency versions against npm's vulnerability database. GitHub Actions enforces both checks for pull requests and pushes to `main`; Netlify repeats them before publishing production; and Dependabot proposes weekly dependency updates.
