@@ -6,7 +6,7 @@
 - `app/layout.tsx` — document metadata and social-preview configuration.
 - `app/globals.css` — visual system, responsive layout and interaction states.
 - `app/thanks/` — static confirmation page shown after a successful form submission.
-- `public/` — intentionally public project artwork and the social-preview image.
+- `public/` — intentionally public artwork, the social-preview image and Netlify security headers.
 - `next.config.ts` — static-export configuration.
 - `netlify.toml` — Netlify build and publish settings.
 
