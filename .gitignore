@@ -54,3 +54,6 @@ next-env.d.ts
 /outputs/
 /work/
 /tmp/
+
+# local social-card drafts (the selected optimized card lives in public/og.png)
+/thumbnail*.png

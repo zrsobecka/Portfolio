@@ -158,13 +158,18 @@ export default function Home() {
                   <dl className="decision-grid">
                     <div><dt>For whom</dt><dd>{project.audience}</dd></div>
                     <div><dt>Problem</dt><dd>{project.problem}</dd></div>
-                    <div><dt>Discovery</dt><dd>{project.discovery}</dd></div>
-                    <div><dt>My role</dt><dd>{project.role}</dd></div>
                     <div><dt>Key decision</dt><dd>{project.decision}</dd></div>
-                    <div><dt>Trade-off / rejected path</dt><dd>{project.tradeoff}</dd></div>
                     <div><dt>Evidence</dt><dd>{project.evidence}</dd></div>
-                    <div><dt>What I learned and changed</dt><dd>{project.learning}</dd></div>
                   </dl>
+                  <details className="case-details">
+                    <summary>Read the full decision record</summary>
+                    <dl className="decision-grid">
+                      <div><dt>Discovery</dt><dd>{project.discovery}</dd></div>
+                      <div><dt>My role</dt><dd>{project.role}</dd></div>
+                      <div><dt>Trade-off / rejected path</dt><dd>{project.tradeoff}</dd></div>
+                      <div><dt>What I learned and changed</dt><dd>{project.learning}</dd></div>
+                    </dl>
+                  </details>
                   <p className="case-next"><b>Next evidence-producing step</b>{project.nextProof}</p>
                   <div className="case-meta"><span>{project.stack}</span>{project.link ? <a href={project.link} target="_blank" rel="noreferrer">View public repository ↗</a> : <span>Private demo during interview</span>}</div>
                 </div>
@@ -225,7 +230,7 @@ export default function Home() {
         </div>
         <form className="contact-form" name="portfolio-contact" method="POST" action="/thanks" data-netlify="true" data-netlify-honeypot="company-website">
           <input type="hidden" name="form-name" value="portfolio-contact" />
-          <p className="form-honeypot"><label>Do not fill this out: <input name="company-website" /></label></p>
+          <p className="form-honeypot" aria-hidden="true"><label>Do not fill this out: <input name="company-website" tabIndex={-1} autoComplete="off" /></label></p>
           <label>Your name<input name="name" type="text" autoComplete="name" required /></label>
           <label>Work email<input name="email" type="email" autoComplete="email" required /></label>
           <label>Role or message<textarea name="message" rows={5} required /></label>
