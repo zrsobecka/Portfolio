@@ -13,7 +13,7 @@ Its audience is hiring teams, collaborators and clients who want a concise, evid
 
 ## Technology
 
-Next.js 16, React 19, TypeScript, Tailwind CSS and a small Cloudflare Worker. The site is statically exported to Cloudflare Static Assets; contact messages are validated by the Worker and stored privately in D1.
+Next.js 16, React 19, TypeScript, Tailwind CSS and a small Cloudflare Worker. The site is statically exported to Cloudflare Static Assets; contact messages are validated by the Worker, stored privately in D1 and delivered through Resend.
 
 ## Local development
 
@@ -44,18 +44,27 @@ npm run cf:deploy
 
 The command runs the complete quality check, applies pending D1 migrations and deploys the Worker with its static assets. Successful form submissions redirect to `/thanks`; messages can be reviewed with `npm run cf:messages` or in the Cloudflare dashboard.
 
+Before the first deployment, verify `menma.works` in Resend and configure the private recipient:
+
+```bash
+npx wrangler secret put CONTACT_RECIPIENT
+npx wrangler secret put RESEND_API_KEY
+```
+
+The Worker always sends from `portfolio@menma.works` and uses the visitor's address only as `Reply-To`. This keeps the sender identity trustworthy and makes replying convenient.
+
 The deployed Workers address is the default base for absolute social-preview metadata. Set `SITE_URL` while building only when deploying the portfolio under a different custom domain.
 
 ## Privacy
 
-The site displays only portfolio copy, project artwork and intentionally public GitHub and LinkedIn links. It does not expose a private email address, use analytics or place application cookies. A submitted contact message is stored in a private Cloudflare D1 database and is never committed to this repository.
+The site displays only portfolio copy, project artwork and intentionally public GitHub and LinkedIn links. It does not expose a private email address, use analytics or place application cookies. A submitted contact message is stored in a private Cloudflare D1 database and delivered through Resend; secrets and message contents are never committed to this repository.
 
 Do not commit environment files, credentials, lead exports or private product data; relevant paths and file types are excluded in `.gitignore`. Run `npm audit` and `npm run check` before a public release.
 
 ## Scope and limitations
 
 - Project descriptions summarize selected work; they are not source releases of the featured private products.
-- Contact-form delivery depends on the Cloudflare D1 binding and migration being present in the deployed Worker.
+- Contact-form delivery depends on the Cloudflare D1 binding, migration, `CONTACT_RECIPIENT` and `RESEND_API_KEY` secrets being present in the deployed Worker, plus a verified `menma.works` sending domain in Resend.
 - The repository contains only the small contact endpoint described above—no user accounts, public database access or secret runtime configuration.
 
 See [CODEBASE.md](CODEBASE.md) for the structure, [WORKFLOW-DIAGRAM.md](WORKFLOW-DIAGRAM.md) for the release flow and [AGENTS.md](AGENTS.md) for contribution safeguards.

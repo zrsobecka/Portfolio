@@ -228,13 +228,13 @@ export default function Home() {
             <a className="text-link" href="https://github.com/zrsobecka" target="_blank" rel="noreferrer">GitHub ↗</a>
           </div>
         </div>
-        <form className="contact-form" name="portfolio-contact" method="POST" action="/contact">
+        <form className="contact-form" name="portfolio-contact" method="POST" action="/api/contact">
           <p className="form-honeypot" aria-hidden="true"><label>Do not fill this out: <input name="company-website" tabIndex={-1} autoComplete="off" /></label></p>
           <label>Your name<input name="name" type="text" autoComplete="name" minLength={2} maxLength={100} required /></label>
           <label>Work email<input name="email" type="email" autoComplete="email" maxLength={254} required /></label>
           <label>Role or message<textarea name="message" rows={5} minLength={10} maxLength={4000} required /></label>
           <button className="button button-primary" type="submit">Send a message</button>
-          <p className="form-note">Stored privately in Cloudflare so my email stays off the public page. Please do not include sensitive information.</p>
+          <p className="form-note">Your message is stored privately and forwarded to my inbox. Please do not include sensitive information.</p>
         </form>
       </section>
 

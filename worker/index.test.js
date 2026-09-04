@@ -4,7 +4,7 @@ import test from 'node:test';
 import worker, { handleContact, validateContact } from './index.js';
 
 function formRequest(fields, headers = {}) {
-  return new Request('https://portfolio.example/contact', {
+  return new Request('https://portfolio.example/api/contact', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -15,7 +15,7 @@ function formRequest(fields, headers = {}) {
   });
 }
 
-function createEnv({ databaseFails = false, rateLimitAllows = true } = {}) {
+function createEnv({ databaseFails = false, emailFails = false, rateLimitAllows = true } = {}) {
   const saved = [];
   return {
     saved,
@@ -32,6 +32,13 @@ function createEnv({ databaseFails = false, rateLimitAllows = true } = {}) {
             },
           }),
         }),
+      },
+      CONTACT_RECIPIENT: 'owner@example.com',
+      RESEND_API_KEY: 're_test_key',
+      RESEND_FETCH: async (url, options) => {
+        if (emailFails) return new Response('Email service unavailable', { status: 503 });
+        saved.push({ email: { url, options, body: JSON.parse(options.body) } });
+        return new Response(JSON.stringify({ id: 'email-id' }), { status: 200 });
       },
       ASSETS: {
         fetch: async () => new Response('asset'),
@@ -69,9 +76,53 @@ test('stores a valid message and redirects to the thank-you page', async () => {
 
   assert.equal(response.status, 303);
   assert.equal(response.headers.get('Location'), 'https://portfolio.example/thanks');
-  assert.equal(saved.length, 1);
+  assert.equal(saved.length, 2);
   assert.equal(saved[0][1], 'Ada Lovelace');
   assert.equal(saved[0][2], 'ada@example.com');
+  assert.equal(saved[1].email.body.reply_to, 'ada@example.com');
+  assert.equal(saved[1].email.body.from, 'portfolio@menma.works');
+  assert.match(saved[1].email.body.text, /I would like to discuss a role/);
+  assert.equal(saved[1].email.options.headers.Authorization, 'Bearer re_test_key');
+});
+
+test('returns a safe error page when email delivery fails', async () => {
+  const { env, saved } = createEnv({ emailFails: true });
+  const originalConsoleError = console.error;
+  console.error = () => {};
+  let response;
+  try {
+    response = await handleContact(formRequest({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I would like to discuss a role.',
+    }), env);
+  } finally {
+    console.error = originalConsoleError;
+  }
+
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get('Location'), 'https://portfolio.example/contact-error');
+  assert.equal(saved.length, 1);
+});
+
+test('returns a safe error page when Resend is not configured', async () => {
+  const { env } = createEnv();
+  delete env.RESEND_API_KEY;
+  const originalConsoleError = console.error;
+  console.error = () => {};
+  let response;
+  try {
+    response = await handleContact(formRequest({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I would like to discuss a role.',
+    }), env);
+  } finally {
+    console.error = originalConsoleError;
+  }
+
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get('Location'), 'https://portfolio.example/contact-error');
 });
 
 test('silently accepts honeypot submissions without storing them', async () => {
@@ -150,7 +201,7 @@ test('serves static assets for non-contact requests', async () => {
 
 test('rejects non-POST requests to the contact endpoint', async () => {
   const { env } = createEnv();
-  const response = await worker.fetch(new Request('https://portfolio.example/contact'), env);
+  const response = await worker.fetch(new Request('https://portfolio.example/api/contact'), env);
 
   assert.equal(response.status, 405);
 });

@@ -6,7 +6,7 @@
 - `app/layout.tsx` — document metadata and social-preview configuration.
 - `app/globals.css` — visual system, responsive layout and interaction states.
 - `app/thanks/` — static confirmation page shown after a successful form submission.
-- `app/contact-error/` — static recovery page shown if a message cannot be stored.
+- `app/contact-error/` — static recovery page shown if a message cannot be stored or delivered.
 - `worker/` — the Cloudflare Worker endpoint and its behavior tests.
 - `migrations/` — the versioned D1 schema for private contact messages.
 - `public/` — intentionally public artwork, the social-preview image and security headers.
@@ -15,7 +15,7 @@
 
 ## Runtime and data flow
 
-Next.js renders the site to static files in `out/`, which Cloudflare serves as Static Assets. A `POST /contact` request runs the Worker, validates and rate-limits the submission, and stores accepted messages in the private D1 database. The browser receives no application secrets. Valid submissions redirect to `/thanks`; storage failures redirect to `/contact-error`.
+Next.js renders the site to static files in `out/`, which Cloudflare serves as Static Assets. A `POST /api/contact` request runs the Worker, validates and rate-limits the submission, stores accepted messages in the private D1 database, and sends the message through Resend. D1 is written before the external email request, so a delivery failure leaves a private record that can be reviewed manually. The browser receives no application secrets. Valid submissions redirect to `/thanks`; storage or delivery failures redirect to `/contact-error`.
 
 ## Quality gates
 
