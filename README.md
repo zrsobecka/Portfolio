@@ -44,14 +44,14 @@ npm run cf:deploy
 
 The command runs the complete quality check, applies pending D1 migrations and deploys the Worker with its static assets. Successful form submissions redirect to `/thanks`; messages can be reviewed with `npm run cf:messages` or in the Cloudflare dashboard.
 
-Before the first deployment, verify `menma.works` in Resend and configure the private recipient:
+Before the first deployment, configure the private recipient and Resend API key:
 
 ```bash
 npx wrangler secret put CONTACT_RECIPIENT
 npx wrangler secret put RESEND_API_KEY
 ```
 
-The Worker always sends from `portfolio@menma.works` and uses the visitor's address only as `Reply-To`. This keeps the sender identity trustworthy and makes replying convenient.
+The Worker sends from `Zuzanna Sobecka Portfolio <onboarding@resend.dev>` to the private address stored in `CONTACT_RECIPIENT`, and uses the visitor's address only as `Reply-To`. Resend's testing sender can deliver only to the email address associated with the Resend account. This keeps the portfolio independent from the domains of featured products while making replies convenient.
 
 The deployed Workers address is the default base for absolute social-preview metadata. Set `SITE_URL` while building only when deploying the portfolio under a different custom domain.
 
@@ -64,7 +64,7 @@ Do not commit environment files, credentials, lead exports or private product da
 ## Scope and limitations
 
 - Project descriptions summarize selected work; they are not source releases of the featured private products.
-- Contact-form delivery depends on the Cloudflare D1 binding, migration, `CONTACT_RECIPIENT` and `RESEND_API_KEY` secrets being present in the deployed Worker, plus a verified `menma.works` sending domain in Resend.
+- Contact-form delivery depends on the Cloudflare D1 binding, migration, and the `CONTACT_RECIPIENT` and `RESEND_API_KEY` secrets being present in the deployed Worker. With `onboarding@resend.dev`, the recipient must match the email address associated with the Resend account.
 - The repository contains only the small contact endpoint described above—no user accounts, public database access or secret runtime configuration.
 
 See [CODEBASE.md](CODEBASE.md) for the structure, [WORKFLOW-DIAGRAM.md](WORKFLOW-DIAGRAM.md) for the release flow and [AGENTS.md](AGENTS.md) for contribution safeguards.

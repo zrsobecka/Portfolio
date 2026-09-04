@@ -80,7 +80,8 @@ test('stores a valid message and redirects to the thank-you page', async () => {
   assert.equal(saved[0][1], 'Ada Lovelace');
   assert.equal(saved[0][2], 'ada@example.com');
   assert.equal(saved[1].email.body.reply_to, 'ada@example.com');
-  assert.equal(saved[1].email.body.from, 'portfolio@menma.works');
+  assert.equal(saved[1].email.body.from, 'Zuzanna Sobecka Portfolio <onboarding@resend.dev>');
+  assert.deepEqual(saved[1].email.body.to, ['owner@example.com']);
   assert.match(saved[1].email.body.text, /I would like to discuss a role/);
   assert.equal(saved[1].email.options.headers.Authorization, 'Bearer re_test_key');
 });

@@ -53,7 +53,7 @@ export async function sendContactEmail(contact, env, fetchImpl = fetch) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'portfolio@menma.works',
+      from: 'Zuzanna Sobecka Portfolio <onboarding@resend.dev>',
       to: [env.CONTACT_RECIPIENT],
       reply_to: contact.email,
       subject: `Portfolio contact from ${contact.name}`,
