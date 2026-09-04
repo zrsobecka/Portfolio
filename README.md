@@ -57,7 +57,7 @@ The deployed Workers address is the default base for absolute social-preview met
 
 ## Privacy
 
-The site displays only portfolio copy, project artwork and intentionally public GitHub and LinkedIn links. It does not expose a private email address, use analytics or place application cookies. A submitted contact message is stored in a private Cloudflare D1 database and delivered through Resend; secrets and message contents are never committed to this repository.
+The site displays only portfolio copy, project artwork and intentionally public GitHub and LinkedIn links. It does not expose a private email address, use analytics or place application cookies. A submitted contact message is stored in a private Cloudflare D1 database and delivered through Resend; secrets and message contents are never committed to this repository. A daily Cloudflare Cron Trigger removes D1 contact submissions older than 90 days. The public privacy notice explains the processing to visitors.
 
 Do not commit environment files, credentials, lead exports or private product data; relevant paths and file types are excluded in `.gitignore`. Run `npm audit` and `npm run check` before a public release.
 

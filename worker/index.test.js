@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import worker, { handleContact, validateContact } from './index.js';
+import worker, { deleteExpiredMessages, handleContact, validateContact } from './index.js';
 
 function formRequest(fields, headers = {}) {
   return new Request('https://portfolio.example/api/contact', {
@@ -205,4 +205,44 @@ test('rejects non-POST requests to the contact endpoint', async () => {
   const response = await worker.fetch(new Request('https://portfolio.example/api/contact'), env);
 
   assert.equal(response.status, 405);
+});
+
+test('scheduled cleanup deletes messages older than 90 days', async () => {
+  const calls = [];
+  const env = {
+    CONTACT_DB: {
+      prepare: (query) => ({
+        bind: (...values) => ({
+          run: async () => {
+            calls.push({ query, values });
+            return { success: true };
+          },
+        }),
+      }),
+    },
+  };
+
+  await deleteExpiredMessages(env, new Date('2026-09-04T12:00:00.000Z'));
+
+  assert.deepEqual(calls, [{
+    query: 'DELETE FROM contact_messages WHERE created_at < ?',
+    values: ['2026-06-06T12:00:00.000Z'],
+  }]);
+});
+
+test('scheduled handler uses the Cloudflare event time for cleanup', async () => {
+  const cutoffs = [];
+  const env = {
+    CONTACT_DB: {
+      prepare: () => ({
+        bind: (cutoff) => ({
+          run: async () => cutoffs.push(cutoff),
+        }),
+      }),
+    },
+  };
+
+  await worker.scheduled({ scheduledTime: Date.parse('2026-09-04T12:00:00.000Z') }, env);
+
+  assert.deepEqual(cutoffs, ['2026-06-06T12:00:00.000Z']);
 });

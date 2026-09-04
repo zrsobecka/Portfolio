@@ -234,7 +234,7 @@ export default function Home() {
           <label>Work email<input name="email" type="email" autoComplete="email" maxLength={254} required /></label>
           <label>Role or message<textarea name="message" rows={5} minLength={10} maxLength={4000} required /></label>
           <button className="button button-primary" type="submit">Send a message</button>
-          <p className="form-note">Your message is stored privately and forwarded to my inbox. Please do not include sensitive information.</p>
+          <p className="form-note">Your message is stored privately and forwarded to my inbox. Please do not include sensitive information. <a href="/privacy">Privacy</a></p>
         </form>
       </section>
 

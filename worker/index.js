@@ -1,4 +1,5 @@
 const MAX_BODY_BYTES = 16_384;
+const MESSAGE_RETENTION_DAYS = 90;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function escapeHtml(value) {
@@ -122,6 +123,15 @@ export async function handleContact(request, env) {
   return redirect(request, '/thanks');
 }
 
+export async function deleteExpiredMessages(env, now = new Date()) {
+  const cutoff = new Date(now.getTime() - MESSAGE_RETENTION_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  return env.CONTACT_DB.prepare(
+    'DELETE FROM contact_messages WHERE created_at < ?',
+  )
+    .bind(cutoff)
+    .run();
+}
+
 const worker = {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -134,6 +144,10 @@ const worker = {
     }
 
     return env.ASSETS.fetch(request);
+  },
+
+  async scheduled(controller, env) {
+    await deleteExpiredMessages(env, new Date(controller.scheduledTime));
   },
 };
 
