@@ -3,14 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.13.0 <23"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint app --max-warnings=0",
-    "check": "npm run lint && npm run build"
+    "lint": "eslint app worker --max-warnings=0",
+    "test": "node --test worker/*.test.js",
+    "check": "npm run lint && npm run test && npm run build",
+    "cf:dev": "npm run build && wrangler dev",
+    "cf:deploy": "npm run check && wrangler d1 migrations apply CONTACT_DB --remote && wrangler deploy",
+    "cf:messages": "wrangler d1 execute CONTACT_DB --remote --command \"SELECT id, created_at, name, email, message FROM contact_messages WHERE is_read = 0 ORDER BY created_at DESC LIMIT 50\""
   },
   "dependencies": {
     "next": "^16.3.2",
@@ -25,7 +29,13 @@
     "eslint": "9.39.4",
     "eslint-config-next": "^16.3.2",
     "tailwindcss": "4.2.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "wrangler": "^4.36.0"
   },
-  "type": "module"
+  "type": "module",
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "unrs-resolver@1.12.2": true,
+    "workerd@1.20260903.1": true
+  }
 }

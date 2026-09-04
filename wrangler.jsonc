@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "zuzanna-sobecka-ai",
+  "main": "./worker/index.js",
+  "compatibility_date": "2026-09-04",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./out",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/contact"]
+  },
+  "d1_databases": [
+    {
+      "binding": "CONTACT_DB",
+      "database_name": "portfolio-contacts",
+      "database_id": "e6d5af30-f87e-4766-adec-4374d908aaa4",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "CONTACT_RATE_LIMITER",
+      "namespace_id": "847219",
+      "simple": {
+        "limit": 5,
+        "period": 60
+      }
+    }
+  ]
+}

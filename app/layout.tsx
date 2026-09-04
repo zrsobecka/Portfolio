@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
-const siteUrl = process.env.URL ?? 'http://localhost:3000';
+const siteUrl = process.env.SITE_URL ?? 'https://zuzanna-sobecka-ai.zusobecka.workers.dev';
 const title = 'Zuzanna Sobecka — AI Product Manager & Builder';
 const description = 'AI Product Manager connecting user problems, product decisions, operations and hands-on delivery.';
 
