@@ -20,6 +20,8 @@ type Project = {
   workflow?: string[];
   stack: string;
   link?: string;
+  linkLabel?: string;
+  secondaryCta?: string;
 };
 
 const products = ['Menma', 'Vile', 'Orion', 'Vile for LinkedIn', 'Raptor', 'Akasha'];
@@ -27,17 +29,17 @@ const products = ['Menma', 'Vile', 'Orion', 'Vile for LinkedIn', 'Raptor', 'Akas
 const featuredProjects: Project[] = [
   {
     id: 'menma', name: 'Menma', descriptor: 'Local AI storytelling system', icon: '/menma.png',
-    status: 'Working local product · External-alpha candidate',
+    status: 'Private alpha · Shipped',
     lede: 'A desktop studio where multiple AI characters share a persistent world while keeping memory, perspective and story truth distinct.',
     problem: 'Long-running AI stories lose continuity and flatten distinct characters into one generic voice.',
-    role: 'Product direction, system design, implementation, evaluation and release preparation.',
+    role: 'Product direction, system design, implementation, evaluation, infrastructure and end-to-end release.',
     audience: 'Writers and role-players who want persistent multi-character stories while keeping their content and model traffic local.',
     discovery: 'Mapped continuity failures, profiled the production turn pipeline with content-free receipts and reviewed repeated fixed-fixture model runs manually.',
     decision: 'Keep Character and Story State outside the response critical path. For public-context turns, remove the slow universal repair loop; retain the hard gate only where private Director context can affect the answer.',
     tradeoff: 'The faster path makes remaining model limitations visible. One grounding fixture still invented technical evidence in 2/3 runs, so I kept that risk explicit instead of hiding it behind a slow fallback.',
-    evidence: 'Across the same nine-fixture production benchmark, median latency fell from 24.1 s to 8.7 s; repairs fell from 7/9 to 0/9; safe fallbacks from 3/9 to 0/9; semantic acceptance improved from 5/9 to 6/9.',
+    evidence: 'Across the same nine-fixture production benchmark, median latency fell from 24.1 s to 8.7 s; repairs fell from 7/9 to 0/9; safe fallbacks from 3/9 to 0/9; semantic acceptance improved from 5/9 to 6/9. Shipped a private-alpha distribution flow: application → review → secure installer delivery → download.',
     learning: 'The bottleneck was local-model inference, not interface or prompt assembly: measured non-native overhead before first text was only 0.13–0.24 s. Rebuilding the coordinator would have added risk without improving the experience.',
-    nextProof: 'Run a small external alpha on a clean machine and test continuity while derived state is deliberately delayed.',
+    nextProof: 'Run the private alpha with external users and measure first-session success, continuity failures and repeated use.',
     metrics: [
       { value: '24.1 → 8.7 s', label: 'median response latency' },
       { value: '7/9 → 0/9', label: 'repair requests' },
@@ -45,6 +47,9 @@ const featuredProjects: Project[] = [
     ],
     workflow: ['Participant beat', 'Visible response', 'Durable save', 'State in background'],
     stack: 'Tauri · Rust · React · TypeScript · SQLite · LM Studio',
+    link: 'https://menma.works',
+    linkLabel: 'Visit menma.works ↗',
+    secondaryCta: 'Private demo during interview',
   },
   {
     id: 'vile', name: 'Vile', descriptor: 'Founder intelligence & relationship OS', icon: '/vile.png',
@@ -171,7 +176,13 @@ export default function Home() {
                     </dl>
                   </details>
                   <p className="case-next"><b>Next evidence-producing step</b>{project.nextProof}</p>
-                  <div className="case-meta"><span>{project.stack}</span>{project.link ? <a href={project.link} target="_blank" rel="noreferrer">View public repository ↗</a> : <span>Private demo during interview</span>}</div>
+                  <div className="case-meta">
+                    <span>{project.stack}</span>
+                    <div className="case-links">
+                      {project.link ? <a href={project.link} target="_blank" rel="noreferrer">{project.linkLabel ?? 'View public repository ↗'}</a> : null}
+                      {project.secondaryCta ? <span>{project.secondaryCta}</span> : project.link ? null : <span>Private demo during interview</span>}
+                    </div>
+                  </div>
                 </div>
               </div>
             </article>
