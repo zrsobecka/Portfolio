@@ -1,8 +1,8 @@
 # Zuzanna Sobecka — AI Product Portfolio
 
-Personal portfolio presenting selected AI products through product decisions, trade-offs and verified evidence rather than screenshots alone.
+Portfolio presenting selected AI products through decisions, trade-offs and verified evidence rather than screenshots alone. It is built for hiring teams, collaborators and clients—not as a production interface for the featured products.
 
-Its audience is hiring teams, collaborators and clients who want a concise, evidence-based view of the work. It is a presentation site, not a production interface for the featured products.
+[View the live portfolio](https://zuzanna-sobecka-ai.zusobecka.workers.dev).
 
 ## Featured work
 
@@ -13,11 +13,11 @@ Its audience is hiring teams, collaborators and clients who want a concise, evid
 
 ## Technology
 
-Next.js 16, React 19, TypeScript, Tailwind CSS and a small Cloudflare Worker. The site is statically exported to Cloudflare Static Assets; contact messages are validated by the Worker, stored privately in D1 and delivered through Resend.
+Next.js 16, React 19, TypeScript and Tailwind CSS, statically exported to Cloudflare Static Assets. A small Cloudflare Worker validates contact messages, stores them privately in D1 and delivers them through Resend.
 
 ## Local development
 
-Requirements: Node.js 22.13–22.x. Node 24 is not used because the current Next.js ESLint toolchain can stall while loading its configuration on Windows.
+Requires Node.js 22.13–22.x. The current Next.js ESLint toolchain can stall on Windows under Node 24.
 
 ```bash
 npm install
@@ -32,17 +32,17 @@ Open `http://localhost:3000`.
 npm run check
 ```
 
-This runs the strict ESLint check, Worker behavior tests, production build and TypeScript validation. GitHub Actions runs `npm audit` and the same code check for every pull request and push to `main`.
+This runs strict ESLint validation, Worker tests, TypeScript validation and a production build. GitHub Actions also runs `npm audit` for every pull request and push to `main`.
 
 ## Deployment
 
-Cloudflare Workers publishes the generated `out` directory as Static Assets. Deploy with:
+Releases are manual. From an up-to-date `main`, run:
 
 ```bash
 npm run cf:deploy
 ```
 
-The command runs the complete quality check, applies pending D1 migrations and deploys the Worker with its static assets. Successful form submissions redirect to `/thanks`; messages can be reviewed with `npm run cf:messages` or in the Cloudflare dashboard.
+The command runs all checks, applies pending D1 migrations, then deploys the Worker and generated `out` assets. Review unread messages with `npm run cf:messages` or in Cloudflare.
 
 Before the first deployment, configure the private recipient and Resend API key:
 
@@ -51,21 +51,21 @@ npx wrangler secret put CONTACT_RECIPIENT
 npx wrangler secret put RESEND_API_KEY
 ```
 
-The Worker sends from `Zuzanna Sobecka Portfolio <onboarding@resend.dev>` to the private address stored in `CONTACT_RECIPIENT`, and uses the visitor's address only as `Reply-To`. Resend's testing sender can deliver only to the email address associated with the Resend account. This keeps the portfolio independent from the domains of featured products while making replies convenient.
+The Worker sends from `Zuzanna Sobecka Portfolio <onboarding@resend.dev>` to `CONTACT_RECIPIENT`, with the visitor's address as `Reply-To`. Resend's testing sender can deliver only to the address associated with its account.
 
-The deployed Workers address is the default base for absolute social-preview metadata. Set `SITE_URL` while building only when deploying the portfolio under a different custom domain.
+The Workers URL is the default base for social-preview metadata. Set `SITE_URL` at build time only when using another domain.
 
 ## Privacy
 
-The site displays only portfolio copy, project artwork and intentionally public GitHub and LinkedIn links. It does not expose a private email address, use analytics or place application cookies. A submitted contact message is stored in a private Cloudflare D1 database and delivered through Resend; secrets and message contents are never committed to this repository. A daily Cloudflare Cron Trigger removes D1 contact submissions older than 90 days. The public privacy notice explains the processing to visitors.
+The site has no analytics, application cookies or exposed private email address. Contact submissions are stored privately in D1, forwarded through Resend and deleted by a daily Cron Trigger after 90 days. The public privacy notice explains this processing.
 
-Do not commit environment files, credentials, lead exports or private product data; relevant paths and file types are excluded in `.gitignore`. Run `npm audit` and `npm run check` before a public release.
+Secrets, message contents, environment files, exports and private product data must remain outside Git; `.gitignore` excludes the relevant local paths and file types.
 
 ## Scope and limitations
 
 - Project descriptions summarize selected work; they are not source releases of the featured private products.
-- Contact-form delivery depends on the Cloudflare D1 binding, migration, and the `CONTACT_RECIPIENT` and `RESEND_API_KEY` secrets being present in the deployed Worker. With `onboarding@resend.dev`, the recipient must match the email address associated with the Resend account.
-- The repository contains only the small contact endpoint described above—no user accounts, public database access or secret runtime configuration.
+- Contact delivery requires the D1 binding, applied migrations and both Worker secrets. With `onboarding@resend.dev`, the recipient must match the Resend account address.
+- The only server-side surface is the contact Worker; there are no user accounts, public database access or committed runtime secrets.
 
 See [CODEBASE.md](CODEBASE.md) for the structure, [WORKFLOW-DIAGRAM.md](WORKFLOW-DIAGRAM.md) for the release flow and [AGENTS.md](AGENTS.md) for contribution safeguards.
 

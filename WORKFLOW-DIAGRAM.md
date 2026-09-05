@@ -4,9 +4,9 @@
 flowchart LR
     A[Source and public artwork] --> B[Push or pull request]
     B --> C[GitHub Actions: audit and code check]
-    B -->|release| D[Cloudflare deployment]
-    D --> E[Audit, tests and static export]
-    E --> F[Worker + Static Assets]
+    C -->|manual release from main| D[Audit, tests and static export]
+    D --> E[Apply D1 migrations]
+    E --> F[Deploy Worker + Static Assets]
     F --> G[Portfolio visitor]
     G -->|optional contact form| H[Validated Worker endpoint]
     H --> I[Private Cloudflare D1 database]
